@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: vsoq-spring-authorization-server
+
+  web:
+    resources:
+      static-locations:
+        - file:C:/video-streaming-over-quic/vsoq.react.auth/
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+
+management:
+  endpoints.web.exposure.include: health,info
+  endpoint.health.show-details: when_authorized
+
+
+
+auth:
+  issuer: "http://localhost:8082"  # iss jwk-set-uri:
+  token:
+    access-minutes: 15
+    refresh-days: 14
+  cookie:
+    access:
+      name: ACCESS_TOKEN
+      path: /
+      same-site: Strict
+      secure: false      # 로컬 HTTP면 false, HTTPS면 true
+      http-only: true
+    refresh:
+      name: REFRESH_TOKEN
+      path: /auth
+      same-site: Strict
+      secure: false
+      http-only: true
+
+
+authn:
+  realms:
+    web:
+      base-uri: http://localhost:8081
+      verify-path: /internal/authn/verify
+      key: ${AUTHZ_INTERNAL_KEY_WEB:local-dev-key}
+      connect-timeout: 1500ms
+      read-timeout: 2000ms
+
+
+
+server:
+  port: 8082

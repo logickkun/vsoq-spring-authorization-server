@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.4'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.security:spring-security-bom:6.5.2'
+    }
+}
+
+group = 'com.logickkun.vsoq'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // Spring Authorization Server
+    implementation 'org.springframework.security:spring-security-oauth2-authorization-server:1.5.1'
+
+    // JWT (Nimbus)
+    implementation 'com.nimbusds:nimbus-jose-jwt:9.37.3'
+
+    // Redis (리프레시 화이트/액세스 블랙리스트는 다음 단계에서)
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator' // 헬스체크 권장
+
+    // 검증/액추에이터(선택)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
